@@ -14,52 +14,48 @@ const URLEPI = "https://striveschool-api.herokuapp.com/books";
 const getData = function () {
   fetch(URLEPI)
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        throw new Error("Errore nella risposta del server: ");
-      }
+      if (!res.ok) throw new Error("Errore nella risposta del server");
+      return res.json();
     })
     .then((arr) => {
+      const row = document.getElementById("row");
+
       arr.forEach((book) => {
         const createDiv = document.createElement("div");
-        const row = document.getElementById("row");
         createDiv.setAttribute("class", "col col-12 col-md-5 col-xl-3 mt-5");
+
         createDiv.innerHTML = `
-                <div class="card h-100 ">
-                <img src="${book.img}" height="400px" class="card-img-top" alt="${book.asin}">
-                <div class="card-body">
-                    <h5 class="card-title">${book.title}</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <p>$${book.price}</p>
-                    <a href="#" class="btn btn-danger">Scarta</a>
-                    <a href="#" class="btn btn-primary">Compra</a>
-                </div>
-                </div>`;
+          <div class="card h-100">
+            <img src="${book.img}" height="400px" class="card-img-top" alt="${book.asin}">
+            <div class="card-body">
+              <h5 class="card-title">${book.title}</h5>
+              <p class="card-text">Testo di esempio</p>
+              <p>$${book.price}</p>
+              <a href="#" class="btn btn-danger">Scarta</a>
+              <a href="#" class="btn btn-primary">Compra</a>
+            </div>
+          </div>
+        `;
+
         row.appendChild(createDiv);
-        const btnDng = document.querySelectorAll(".card .btn-danger");
-        btnDng.forEach((btn) => {
-          btn.addEventListener("click", (e) => {
-            const thisBtn = e.target.closest(".card");
-            thisBtn.style.display = "none";
-          });
+
+        const btnDng = createDiv.querySelector(".btn-danger");
+        const btnPri = createDiv.querySelector(".btn-primary");
+
+        btnDng.addEventListener("click", () => {
+          createDiv.style.display = "none";
         });
-        const btnPri = document.querySelectorAll(".card .btn-primary");
-        btnPri.forEach((btn) => {
-          btn.addEventListener("click", (e) => {
-            const cestino = document.getElementById("cestino");
-            const createCart = document.createElement("img");
-            createCart.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"    fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
-                    </svg>`;
-            cestino.appendChild(createCart);
-          });
+
+        btnPri.addEventListener("click", () => {
+          const fillCart = document.getElementById("fill-cart");
+          const createLi = document.createElement("li");
+          createLi.setAttribute("class", "d-flex align-items-center ");
+          createLi.innerHTML = ` <img src="${book.img}" class="mx-2 h-25 w-25">${book.title} at price of $${book.price}`;
+          fillCart.appendChild(createLi);
         });
       });
     })
-    .catch((err) => {
-      console.log("errore inprevisto", err);
-    });
+    .catch((err) => console.log("Errore imprevisto:", err));
 };
 
 getData();
