@@ -27,24 +27,27 @@ const getData = function () {
         createDiv.setAttribute("class", "col col-12 col-md-5 col-xl-3 mt-5");
         createDiv.innerHTML = `
                 <div class="card h-100 ">
-                <img src="${book.img}" class="card-img-top" alt="${book.asin}">
+                <img src="${book.img}" height="400px" class="card-img-top" alt="${book.asin}">
                 <div class="card-body">
                     <h5 class="card-title">${book.title}</h5>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     <p>$${book.price}</p>
-                    <a href="#" class="btn btn-primary">Select</a>
+                    <a href="#" class="btn btn-danger">Scarta</a>
+                    <a href="#" class="btn btn-primary">Compra</a>
                 </div>
                 </div>`;
         row.appendChild(createDiv);
-        const div = document.querySelectorAll(".card");
-        const btn = document.querySelectorAll(".card .btn");
-        btn.forEach((btn,i) => {
+        const btnDng = document.querySelectorAll(".card .btn-danger");
+        btnDng.forEach((btn) => {
           btn.addEventListener("click", (e) => {
-            if (e.target) {
-              div.forEach((div) => {
-                div.style.display = "none";
-              });
-            }
+            let thisBtn = e.target.closest(".card");
+            thisBtn.style.display = "none";
+          });
+        });
+        const btnPri = document.querySelectorAll(".card .btn-primary");
+        btnPri.forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            
           });
         });
       });
